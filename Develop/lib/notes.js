@@ -1,26 +1,30 @@
 const fs = require('fs');
-
+const dbPath = require('../db/db.json')
 const path = require('path');
 // const { create } = require('domain');
 
-function checkNote(note) {
+exports.getNotes = () => {
+    try{
+        let notes = fs.readFileSync(dbPath, "utf-8");
+        console.log(notes);
+    } catch(err){
+        console.log(`Did not work ======> ${err}`);
+    }
+}
+
+exports.checkNote = (note)=> {
     if (!note.title || !note.text) {
         return false;
     } return true;
 }
 
-function addNotes(note, notesArray) {
+exports.addNotes = (note, notesArray) => {
     notesArray.push(note);
     fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify({ notes: notesArray }, null, 2));
     return note;
 }
 
-function deleteNotes(notesArray) {
+exports.deleteNotes = (notesArray) => {
     fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify({ notes: notesArray }, null, 2));
 }
 
-module.exports = {
-    checkNote,
-    addNotes,
-    deleteNotes
-};
