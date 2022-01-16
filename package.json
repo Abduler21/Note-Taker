@@ -2,22 +2,14 @@
   "name": "note-taker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Abduler21/Note-Taker.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Abduler21/Note-Taker/issues"
-  },
-  "homepage": "https://github.com/Abduler21/Note-Taker#readme",
+  
+  
   "dependencies": {
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
