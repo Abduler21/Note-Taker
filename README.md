@@ -21,7 +21,7 @@ Here is a sample screenshot:
 <img src="./src/img2.PNG">
 
 Heroku Website:
-
+https://note-taker-unique.herokuapp.com/
 
 
 
