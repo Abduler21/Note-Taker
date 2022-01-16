@@ -1,13 +1,20 @@
-const path = require('path');
+// Dependencies
+const path = require("path");
 
-const router = require('express').Router();
+// Routing
 
-router.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/notes.html'));
-});
+module.exports = function (app){
 
-router.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-});
+    // HTML GET Requests
+    // Below code handles when users 'visit' a page.
+    // In each of the below cases the user is shown an HTML page of content
 
-module.exports = router;
+    
+    app.get('/notes', function(request, response) {
+        response.sendFile(path.join(__dirname, '../public/notes.html'));
+    });
+
+    app.get('*', function(request, response) {
+        response.sendFile(path.join(__dirname, '../public/index.html'));
+    });
+};

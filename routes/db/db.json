@@ -1,15 +1,1 @@
-
-{
-    "notes":[
-        {
-            "title":"Test Title",
-            "text":"Test text", 
-            "id": "1"
-        },
-        {
-            "title":"Math notes",
-            "text":"1+1=2", 
-            "id": "2"
-        }
-    ]
-}
+[{"title":"Math notes","text":"1+1=2","id":"2"},{"title":"title","text":"kool","id":"3"}]

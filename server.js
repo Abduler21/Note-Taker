@@ -1,22 +1,22 @@
-// DEPENDENCIES
-const express = require('express');
-const apiRoutes = require('./routes/apiRoute');
-const htmlRoutes = require('./routes/htmlRoute');
+// Dependencies
+const express = require("express");
 
+// Express configuration
+//Tells node that we are creating an 'express' server
 const app = express();
-const PORT = process.env.PORT || 8001; 
 
-// MIDDLEWARE
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static('public'));
+// Sets an initial port.
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // enables you use middlewares
+// Sets up the Express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
 
-// routes
-app.use('/api', apiRoutes);
-app.use('/', htmlRoutes);
+// ROUTES
+require('./routes/apiRoute')
+require('./routes/htmlRoute')(app);
 
-// server
-app.listen(PORT, () => {
-    console.log(`API server now on port ${PORT}`);
+app.listen(PORT, function() {
+    console.log(`App listening on PORT: ${PORT}`);
 });

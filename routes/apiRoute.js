@@ -1,65 +1,74 @@
-const router = require('express').Router();
-// const notes = require('../lib/notes');
-const fs = require('fs');
-const path = require('path');
+// Dependencies
+const fs = require("fs");
 
+// imported 'uuid' npm package for unique id
+const { v4: uuidv4 } = require('uuid');
 
-// This route gets all the notes from DB
-router.get('/notes', (req, res) => {
-    try{
-        let notes = JSON.parse(fs.readFileSync(`${__dirname}/db/db.json`, "utf-8")); // get notes from db 
+// ROUTING
+module.exports = function (app) {
+
+    // API GET Request
+    app.get("/api/notes", (request, response) => {
         
-        return res.status(200).json({
-            status: 'success',
-            data: {
-                notes
-            }
-        })
-    } catch(err){
-        console.log(`Did not work ======> ${err}`);
-    }
-});
+        console.log("\n\nExecuting GET notes request");
 
-// route that gets one note from DB
-router.get('/notes/:id', (req, res) => {
-    console.log(req.params.id);
-    let notesArray = [];
-    try{
+        // Read 'db.json' file 
+        let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
         
-        // get all notes from db 
-        let notes = JSON.parse(fs.readFileSync(`${__dirname}/db/db.json`, "utf-8"));
-        // iterating through notes.notes[] 
-        // getting each note
-        notes.notes.map(note => { 
-            notesArray.push(note) // pushing each note into our empty array notesArray[]
-        })
-        // 1. find note
-        let correctNote = notesArray.find(x => x.id === req.params.id);
-        console.log(`The note found is: ===========${JSON.stringify(correctNote)}`);
-
-        // return note
-        return res.status(201).json({
-            status: 'success',
-            data: {
-                note: correctNote
-            }
-        })
-    }catch(err){
-        console.log(err);
-    }
-})
-
-// router.post('/notes', (req, res) => {
-//     notes.addNotes(req.body).then(notes => 
-//         res.json(notes))
-//         .catch(err => res.status(400).json(err))
-// });
-
-// router.delete('/notes/:id', (req, res) => {
-//     notes.deleteNotes(req.params.id).then(() => 
-//     res.json({ ok:true}))
-//     .catch(err => res.status(400).json(err))
-// });
+        console.log("\nGET request - Returning notes data: " + JSON.stringify(data));
+        
+        // Send read data to response of 'GET' request
+        response.json(data);
+    });
 
 
-module.exports = router;
+    // API POST Request
+    app.post("/api/notes", (request, response) => {
+
+        // Extracted new note from request body.  
+        const newNote = request.body;
+        
+        console.log("\n\nPOST request - New Note : " + JSON.stringify(newNote));
+
+        // Assigned unique id obtained from 'uuid' package
+        newNote.id = uuidv4();
+
+        // Read data from 'db.json' file
+        let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    
+        // Pushed new note in notes file 'db.json'
+        data.push(newNote);
+
+        // Written notes data to 'db.json' file
+        fs.writeFileSync('./db/db.json', JSON.stringify(data));
+        
+        console.log("\nSuccessfully added new note to 'db.json' file!");
+
+        // Send response
+        response.json(data);
+    });
+
+
+    // API DELETE request
+    app.delete("/api/notes/:id", (request, response) => {
+
+        // Fetched id to delete
+        let noteId = request.params.id.toString();
+        
+        console.log(`\n\nDELETE note request for noteId: ${noteId}`);
+
+        // Read data from 'db.json' file
+        let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+
+        // filter data to get notes except the one to delete
+        const newData = data.filter( note => note.id.toString() !== noteId );
+
+        // Write new data to 'db.json' file
+        fs.writeFileSync('./db/db.json', JSON.stringify(newData));
+        
+        console.log(`\nSuccessfully deleted note with id : ${noteId}`);
+
+        // Send response
+        response.json(newData);
+    });
+};
